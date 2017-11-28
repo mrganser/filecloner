@@ -1,0 +1,21 @@
+.button {
+  color: white;
+  font-weight: bold;
+  height: 100px;
+  width: 100px;
+  border: none;
+  border-radius: 50%;
+  margin: 6px;
+  &.info {
+    background-color: #007BFF;
+    &:hover {
+      background-color: #0069D9;
+    }
+  }
+  &.success {
+    background-color: #28A745;
+    &:hover {
+      background-color: #218838;
+    }
+  }
+}
