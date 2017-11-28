@@ -1,5 +1,7 @@
 import React from 'react'
 
+import './button.scss'
+
 export const Button = (props) => {
   const {type, text, onClick, color, faIcon, title} = props
   return (

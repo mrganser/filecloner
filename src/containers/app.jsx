@@ -3,7 +3,8 @@ import { ipcRenderer } from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
 
-import { Button } from '../components/button/button-component'
+import { Button } from '../components/button/button'
+import './app.scss'
 
 export class App extends React.Component {
   constructor (props) {
@@ -126,5 +127,3 @@ export class App extends React.Component {
     )
   }
 }
-
-export default App
