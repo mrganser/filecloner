@@ -19,6 +19,9 @@
   },
   "build": {
     "appId": "com.mrganser.filecloner",
+    "directories": {
+      "buildResources": "src/assets/icons"
+    },
     "win": {
       "target": "portable"
     }
