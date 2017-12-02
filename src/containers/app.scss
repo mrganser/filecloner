@@ -11,3 +11,20 @@
 #content {
   margin: 20px;
 }
+
+#info {
+  margin: 20px;
+  padding: 10px;
+  &.success {
+    background-color: #28A745;
+  }
+  &.error {
+    background-color: #D9534F;
+  }
+  &.warning {
+    background-color: #C37100;
+  }
+  &.info {
+    background-color: #5BC0DE;
+  }
+}

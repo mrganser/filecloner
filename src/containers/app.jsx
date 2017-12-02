@@ -12,7 +12,7 @@ export class App extends React.Component {
     this.state = {
       filePaths: [],
       destinationFolder: '',
-      info: '',
+      info: {},
       quantity: 1,
       suffix: '',
       order: 'consecutive',
@@ -35,11 +35,11 @@ export class App extends React.Component {
   }
 
   handleSelectedFiles (event, files) {
-    this.setState({filePaths: files, info: `Files selected: ${files}`})
+    this.setState({filePaths: files, info: {text: `Files selected: ${files}`, type: 'info'}})
   }
 
   handleSelectedDestination (event, directory) {
-    this.setState({destinationFolder: directory, info: `Destination selected: ${directory}`})
+    this.setState({destinationFolder: directory, info: {text: `Destination selected: ${directory}`, type: 'info'}})
   }
 
   cloneFiles () {
@@ -69,25 +69,24 @@ export class App extends React.Component {
           const index = Math.floor((times - 1) / Math.ceil(quantity / files.length))  // Review this, where should we take off extras? Now the last file is the one that misses
           const finalSuffix = suffix ? (suffix + path.extname(files[index].filename)) : files[index].filename
           fs.writeFileSync(path.resolve(destination, `${prefix}${finalSuffix}`), files[index].stream)
-          // this.setState({info: `Processed files: ${times} out of ${quantity}`})
         }
       }
     }
     const {filePaths, destinationFolder, quantity} = this.state
     if (!filePaths || filePaths.length < 1) {
-      return this.setState({info: 'Select the files you want to clone'})
+      return this.setState({info: {text: 'Select the files you want to clone', type: 'warning'}})
     }
     if (!destinationFolder || !fs.existsSync(destinationFolder)) {
-      return this.setState({info: 'Destination folder doesn\'t exist'})
+      return this.setState({info: {text: 'Destination folder doesn\'t exist', type: 'warning'}})
     }
-    if (!quantity || quantity < 1) {
-      return this.setState({info: 'Quantity should be'})
+    if (!quantity || quantity < 1 || quantity > Number.MAX_SAFE_INTEGER) {
+      return this.setState({info: {text: 'Quantity should be 1 or higher', type: 'warning'}})
     }
     this.setState({loading: true}, () => {
       setTimeout(() => {
         const files = loadFiles(filePaths)
         localCloneFiles(files, destinationFolder)
-        this.setState({info: 'Files succesfully cloned!', loading: false})
+        this.setState({info: {text: 'Files succesfully cloned!', type: 'success'}, loading: false})
       })
     })
   }
@@ -122,7 +121,7 @@ export class App extends React.Component {
         <i className='fa fa-arrow-right fa-2x' />
         <Button color='success' type='button' faIcon='fa-clone fa-3x' title='Clone files' onClick={() => this.cloneFiles()} />
         <br />
-        <span id='info'>{info}</span>
+        <div id='info' className={info.type}>{info.text}</div>
       </div>
     )
   }
