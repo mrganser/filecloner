@@ -5,6 +5,7 @@ import * as path from 'path'
 
 import { Button } from '../components/button/button'
 import './app.scss'
+import logoSrc from '../assets/icons/icon.png'
 
 export class App extends React.Component {
   constructor (props) {
@@ -35,11 +36,11 @@ export class App extends React.Component {
   }
 
   handleSelectedFiles (event, files) {
-    this.setState({filePaths: files, info: {text: `Files selected: ${files}`, type: 'info'}})
+    this.setState({filePaths: files, info: {text: 'Files selected!', type: 'info'}})
   }
 
   handleSelectedDestination (event, directory) {
-    this.setState({destinationFolder: directory, info: {text: `Destination selected: ${directory}`, type: 'info'}})
+    this.setState({destinationFolder: directory, info: {text: 'Destination folder selected!', type: 'info'}})
   }
 
   cloneFiles () {
@@ -79,16 +80,18 @@ export class App extends React.Component {
     if (!destinationFolder || !fs.existsSync(destinationFolder)) {
       return this.setState({info: {text: 'Destination folder doesn\'t exist', type: 'warning'}})
     }
-    if (!quantity || quantity < 1 || quantity > Number.MAX_SAFE_INTEGER) {
-      return this.setState({info: {text: 'Quantity should be 1 or higher', type: 'warning'}})
+    if (!quantity || quantity < 1 || quantity > 10000) {
+      return this.setState({info: {text: 'Quantity should be between 1 and 10000', type: 'warning'}})
     }
-    this.setState({loading: true}, () => {
-      setTimeout(() => {
-        const files = loadFiles(filePaths)
-        localCloneFiles(files, destinationFolder)
-        this.setState({info: {text: 'Files succesfully cloned!', type: 'success'}, loading: false})
+    if (window.confirm('Files in the destination folder with the same name will be overwritten. Confirm?')) {
+      this.setState({loading: true}, () => {
+        setTimeout(() => {
+          const files = loadFiles(filePaths)
+          localCloneFiles(files, destinationFolder)
+          this.setState({info: {text: 'Files succesfully cloned!', type: 'success'}, loading: false})
+        })
       })
-    })
+    }
   }
 
   handleInputChange (event) {
@@ -96,30 +99,53 @@ export class App extends React.Component {
   }
 
   render () {
-    const { info, loading } = this.state
+    const { info, loading, filePaths, destinationFolder} = this.state
 
     if (loading) {
       return (<h2><i className='fa fa-spinner fa-pulse fa-fw' />Processing...</h2>)
     }
     return (
       <div id='content'>
-        <h1>Welcome to File Cloner!</h1>
-        <label htmlFor='quantity'>Quantity: </label>
-        <input name='quantity' value={this.state.quantity} onChange={this.handleInputChange} type='number' min='1' max='9007199254740991' />
+        <div id='header'>
+          <h1>Welcome to File Cloner!<img id='logo' src={logoSrc} /></h1>
+        </div>
+        <h3>Options</h3>
+        <hr />
+        <label htmlFor='quantity'>
+          Choose the number of resulting files:
+          <input name='quantity' value={this.state.quantity} onChange={this.handleInputChange} type='number' min='1' max='10000' />
+        </label>
         <br />
-        <label htmlFor='suffix'>Suffix: </label>
-        <input name='suffix' value={this.state.suffix} onChange={this.handleInputChange} />
+        <label htmlFor='suffix'>
+          Write down a suffix for your files (optional):
+          <input name='suffix' type='text' maxLength='40' value={this.state.suffix} onChange={this.handleInputChange} />
+          <small className='info'>Leave blank to use original filenames as suffix.</small><br />
+          <small className='info'>They will be numbered (XXXXsuffix.extension)</small>
+        </label>
         <br />
-        <span>Order:</span>
-        <input type='radio' name='order' value='consecutive' onChange={this.handleInputChange} checked={this.state.order === 'consecutive'} /><span>Consecutive</span>
-        <input type='radio' name='order' value='grouped' onChange={this.handleInputChange} checked={this.state.order === 'grouped'} /><span>Grouped</span>
+        <label htmlFor='order'>
+          Order:
+          <div>
+            Ordered
+            <input type='radio' name='order' id='consecutive' value='consecutive'
+              onChange={this.handleInputChange} checked={this.state.order === 'consecutive'} />
+            Grouped
+            <input type='radio' name='order' id='grouped' value='grouped'
+              onChange={this.handleInputChange} checked={this.state.order === 'grouped'} />
+          </div>
+          <small className='info'>Ordered (1,2,3,1,2...) | Grouped (1,1,1,2,2...)</small>
+        </label>
         <br />
-        <br />
-        <Button color='info' type='button' faIcon='fa-files-o fa-3x' title='Select files' onClick={() => ipcRenderer.send('open-file-dialog')} />
+        <h3>Process</h3>
+        <hr />
+        <Button color='info' type='button' faIcon='fa-files-o fa-3x' title='Select files'
+          onClick={() => ipcRenderer.send('open-file-dialog')} />
         <i className='fa fa-arrow-right fa-2x' />
-        <Button color='info' type='button' faIcon='fa-folder-open-o fa-3x' title='Select destination' onClick={() => ipcRenderer.send('open-directory-dialog')} />
+        <Button color='info' disabled={filePaths.length < 1} type='button' faIcon='fa-folder-open-o fa-3x'
+          title='Select destination' onClick={() => ipcRenderer.send('open-directory-dialog')} />
         <i className='fa fa-arrow-right fa-2x' />
-        <Button color='success' type='button' faIcon='fa-clone fa-3x' title='Clone files' onClick={() => this.cloneFiles()} />
+        <Button color='success' disabled={filePaths.length < 1 || !destinationFolder} type='button' faIcon='fa-clone fa-3x'
+          title='Clone files' onClick={() => this.cloneFiles()} />
         <br />
         <div id='info' className={info.type}>{info.text}</div>
       </div>

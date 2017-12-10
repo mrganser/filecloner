@@ -8,14 +8,17 @@
   margin: 6px;
   &.info {
     background-color: #007BFF;
-    &:hover {
+    &:enabled:hover{
       background-color: #0069D9;
     }
   }
   &.success {
     background-color: #28A745;
-    &:hover {
+    &:enabled:hover {
       background-color: #218838;
     }
   }
+}
+.button:disabled {
+  opacity: .65;
 }

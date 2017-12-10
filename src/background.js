@@ -22,7 +22,7 @@ function createWindow () {
     title: 'File Cloner',
     backgroundColor: '#272822',
     width: 800,
-    height: 600
+    height: 800
   })
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
