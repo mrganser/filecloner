@@ -98,6 +98,7 @@ export class App extends React.Component {
     this.setState({[event.target.name]: event.target.value})
   }
 
+  // TODO: Files orderer and maybe frecuency on each file
   render () {
     const { info, loading, filePaths, destinationFolder} = this.state
 
