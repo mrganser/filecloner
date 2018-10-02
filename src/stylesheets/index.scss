@@ -1,9 +1,10 @@
-$fa-font-path: '../../node_modules/font-awesome/fonts';
-@import '../../node_modules/font-awesome/scss/font-awesome';
+$fa-font-path: "../../node_modules/font-awesome/fonts";
+@import "../../node_modules/font-awesome/scss/font-awesome";
 
-html, body {
+html,
+body {
   height: 100%;
   width: 100%;
   margin: 0;
-  font-family: 'Open Sans';
+  font-family: "Open Sans";
 }

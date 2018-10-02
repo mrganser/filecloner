@@ -7,18 +7,18 @@
   border-radius: 50%;
   margin: 6px;
   &.info {
-    background-color: #007BFF;
-    &:enabled:hover{
-      background-color: #0069D9;
+    background-color: #007bff;
+    &:enabled:hover {
+      background-color: #0069d9;
     }
   }
   &.success {
-    background-color: #28A745;
+    background-color: #28a745;
     &:enabled:hover {
       background-color: #218838;
     }
   }
 }
 .button:disabled {
-  opacity: .65;
+  opacity: 0.65;
 }

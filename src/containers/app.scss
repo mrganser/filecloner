@@ -1,5 +1,6 @@
 #app {
   color: white;
+  background-color: #272822;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,16 +26,16 @@
   margin: 20px;
   padding: 10px;
   &.success {
-    background-color: #28A745;
+    background-color: #28a745;
   }
   &.error {
-    background-color: #D9534F;
+    background-color: #d9534f;
   }
   &.warning {
-    background-color: #C37100;
+    background-color: #c37100;
   }
   &.info {
-    background-color: #337AB7;
+    background-color: #337ab7;
   }
 }
 
@@ -49,7 +50,8 @@ label {
   margin-top: 10px;
 }
 
-input[type="text"], input[type="number"] {
+input[type="text"],
+input[type="number"] {
   display: block;
   width: 100%;
 }

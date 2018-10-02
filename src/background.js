@@ -8,8 +8,12 @@ const path = require('path')
 const url = require('url')
 
 const env = require('env')
+
+// FIXME: Hard reset does not work very well
 if (env.name === 'development') {
-  require('electron-reload')(__dirname)
+  require('electron-reload')(__dirname, {
+    electron: process.execPath
+  })
 }
 
 // Keep a global reference of the window object, if you don't, the window will
