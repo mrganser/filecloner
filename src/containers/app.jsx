@@ -155,7 +155,7 @@ export class App extends React.Component {
       <div id='content'>
         <div id='header'>
           <h1>
-            Welcome to File Clonerr!
+            Welcome to File Cloner!
             <img id='logo' src={logoSrc} />
           </h1>
         </div>
