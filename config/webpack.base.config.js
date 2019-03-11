@@ -11,7 +11,7 @@ module.exports = env => {
       __filename: false
     },
     externals: [nodeExternals()],
-    devtool: 'source-map',
+    devtool: env === 'development' ? 'cheap-source-map' : '',
     module: {
       rules: [
         {
