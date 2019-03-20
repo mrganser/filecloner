@@ -136,6 +136,10 @@ export class App extends React.Component {
   }
 
   handleInputChange (event) {
+    if (event.target.name === 'quantity') {
+      event.target.value = event.target.value.replace(/[^0-9]/gi, '')
+      event.target.value = event.target.value > 10000 ? 10000 : event.target.value
+    }
     this.setState({ [event.target.name]: event.target.value })
   }
 
@@ -167,9 +171,7 @@ export class App extends React.Component {
             name='quantity'
             value={this.state.quantity}
             onChange={this.handleInputChange}
-            type='number'
-            min='1'
-            max='10000'
+            type='text'
           />
         </label>
         <br />
