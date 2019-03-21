@@ -1,257 +1,284 @@
-import React from 'react'
-import { ipcRenderer } from 'electron'
-import * as fs from 'fs'
-import * as path from 'path'
+import React from "react";
+import { ipcRenderer } from "electron";
+import * as fs from "fs";
+import * as path from "path";
+import { sortableContainer, sortableElement } from "react-sortable-hoc";
 
-import { Button } from '../components/button/button'
-import './app.scss'
-import logoSrc from '../assets/icons/icon.png'
+import { Button } from "../components/button/button";
+import "./app.scss";
+import logoSrc from "../assets/icons/icon.png";
+
+const SortableItem = sortableElement(({value}) => <div className='sortable-item'>{value}</div>);
+
+const SortableContainer = sortableContainer(({children}) => {
+  return <div className='sortable-container'>{children}</div>;
+});
 
 export class App extends React.Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       filePaths: [],
-      destinationFolder: '',
+      destinationFolder: "",
       info: {},
       quantity: 1,
-      suffix: '',
-      order: 'consecutive',
+      suffix: "",
+      order: "consecutive",
       loading: false
-    }
+    };
 
-    this.handleSelectedFiles = this.handleSelectedFiles.bind(this)
-    this.handleSelectedDestination = this.handleSelectedDestination.bind(this)
-    this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleSelectedFiles = this.handleSelectedFiles.bind(this);
+    this.handleSelectedDestination = this.handleSelectedDestination.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.onSortEnd = this.onSortEnd.bind(this);
   }
 
-  componentDidMount () {
-    ipcRenderer.on('selected-files', this.handleSelectedFiles)
-    ipcRenderer.on('selected-directory', this.handleSelectedDestination)
+  componentDidMount() {
+    ipcRenderer.on("selected-files", this.handleSelectedFiles);
+    ipcRenderer.on("selected-directory", this.handleSelectedDestination);
   }
 
-  componentWillUnmount () {
-    ipcRenderer.removeListener('selected-files', this.handleSelectedFiles)
+  componentWillUnmount() {
+    ipcRenderer.removeListener("selected-files", this.handleSelectedFiles);
     ipcRenderer.removeListener(
-      'selected-directory',
+      "selected-directory",
       this.handleSelectedDestination
-    )
+    );
   }
 
-  handleSelectedFiles (event, files) {
+  handleSelectedFiles(event, files) {
     this.setState({
       filePaths: files,
-      info: { text: 'Files selected!', type: 'info' }
-    })
+      info: { text: "Files selected!", type: "info" }
+    });
   }
 
-  handleSelectedDestination (event, directory) {
+  handleSelectedDestination(event, directory) {
     this.setState({
       destinationFolder: directory,
-      info: { text: 'Destination folder selected!', type: 'info' }
-    })
+      info: { text: "Destination folder selected!", type: "info" }
+    });
   }
 
-  cloneFiles () {
+  cloneFiles() {
     const loadFiles = paths => {
-      let files = []
+      let files = [];
       paths.forEach(filePath => {
         files.push({
           stream: fs.readFileSync(filePath), // TODO: Check fail reading
           filename: path.basename(filePath)
-        })
-      })
-      return files
-    }
+        });
+      });
+      return files;
+    };
     const localCloneFiles = (files, destination) => {
-      const { quantity, order, suffix } = this.state
-      let times = 0
-      if (order === 'consecutive') {
+      const { quantity, order, suffix } = this.state;
+      let times = 0;
+      if (order === "consecutive") {
         while (++times <= quantity) {
-          const prefix = `${'0'.repeat(
+          const prefix = `${"0".repeat(
             quantity.toString().length - times.toString().length
-          )}${times}` // Fill with zeros
-          const index = (times - 1) % files.length
+          )}${times}`; // Fill with zeros
+          const index = (times - 1) % files.length;
           const finalSuffix = suffix
             ? suffix + path.extname(files[index].filename)
-            : files[index].filename
+            : files[index].filename;
           fs.writeFileSync(
             path.resolve(destination, `${prefix}${finalSuffix}`),
             files[index].stream
-          )
+          );
         }
       } else {
         while (++times <= quantity) {
-          const prefix = `${'0'.repeat(
+          const prefix = `${"0".repeat(
             quantity.toString().length - times.toString().length
-          )}${times}` // Fill with zeros
+          )}${times}`; // Fill with zeros
           const index = Math.floor(
             (times - 1) / Math.ceil(quantity / files.length)
-          ) // Review this, where should we take off extras? Now the last file is the one that misses
+          ); // Review this, where should we take off extras? Now the last file is the one that misses
           const finalSuffix = suffix
             ? suffix + path.extname(files[index].filename)
-            : files[index].filename
+            : files[index].filename;
           fs.writeFileSync(
             path.resolve(destination, `${prefix}${finalSuffix}`),
             files[index].stream
-          )
+          );
         }
       }
-    }
-    const { filePaths, destinationFolder, quantity } = this.state
+    };
+    const { filePaths, destinationFolder, quantity } = this.state;
     if (!filePaths || filePaths.length < 1) {
       return this.setState({
-        info: { text: 'Select the files you want to clone', type: 'warning' }
-      })
+        info: { text: "Select the files you want to clone", type: "warning" }
+      });
     }
     if (!destinationFolder || !fs.existsSync(destinationFolder)) {
       return this.setState({
-        info: { text: "Destination folder doesn't exist", type: 'warning' }
-      })
+        info: { text: "Destination folder doesn't exist", type: "warning" }
+      });
     }
     if (!quantity || quantity < 1 || quantity > 10000) {
       return this.setState({
         info: {
-          text: 'Quantity should be between 1 and 10000',
-          type: 'warning'
+          text: "Quantity should be between 1 and 10000",
+          type: "warning"
         }
-      })
+      });
     }
     if (
       window.confirm(
-        'Files in the destination folder with the same name will be overwritten. Confirm?'
+        "Files in the destination folder with the same name will be overwritten. Confirm?"
       )
     ) {
       this.setState({ loading: true }, () => {
         setTimeout(() => {
-          const files = loadFiles(filePaths)
-          localCloneFiles(files, destinationFolder)
+          const files = loadFiles(filePaths);
+          localCloneFiles(files, destinationFolder);
           this.setState({
-            info: { text: 'Files succesfully cloned!', type: 'success' },
+            info: { text: "Files succesfully cloned!", type: "success" },
             loading: false
-          })
-        })
-      })
+          });
+        });
+      });
     }
   }
 
-  handleInputChange (event) {
-    if (event.target.name === 'quantity') {
-      event.target.value = event.target.value.replace(/[^0-9]/gi, '')
-      event.target.value = event.target.value > 10000 ? 10000 : event.target.value
+  handleInputChange(event) {
+    if (event.target.name === "quantity") {
+      event.target.value = event.target.value.replace(/[^0-9]/gi, "");
+      event.target.value =
+        event.target.value > 10000 ? 10000 : event.target.value;
     }
-    this.setState({ [event.target.name]: event.target.value })
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  arrayMove(array, from, to) {
+    array = array.slice();
+    array.splice(to < 0 ? array.length + to : to, 0, array.splice(from, 1)[0]);
+    return array;
+  }
+
+  onSortEnd({ oldIndex, newIndex }) {
+    this.setState(({ filePaths }) => ({
+      filePaths: this.arrayMove(filePaths, oldIndex, newIndex)
+    }));
   }
 
   // TODO: Files orderer and maybe frecuency on each file
-  render () {
-    const { info, loading, filePaths, destinationFolder } = this.state
+  render() {
+    const { info, loading, filePaths, destinationFolder } = this.state;
 
     if (loading) {
       return (
         <h2>
-          <i className='fa fa-spinner fa-pulse fa-fw' />
+          <i className="fa fa-spinner fa-pulse fa-fw" />
           Processing...
         </h2>
-      )
+      );
     }
     return (
-      <div id='content'>
-        <div id='header'>
+      <div id="content">
+        <div id="header">
           <h1>
             Welcome to File Cloner!
-            <img id='logo' src={logoSrc} />
+            <img id="logo" src={logoSrc} />
           </h1>
         </div>
         <h3>Options</h3>
         <hr />
-        <label htmlFor='quantity'>
+        <label htmlFor="quantity">
           Choose the number of resulting files:
           <input
-            name='quantity'
+            name="quantity"
             value={this.state.quantity}
             onChange={this.handleInputChange}
-            type='text'
+            type="text"
           />
         </label>
         <br />
-        <label htmlFor='suffix'>
+        <label htmlFor="suffix">
           Write down a suffix for your files (optional):
           <input
-            name='suffix'
-            type='text'
-            maxLength='40'
+            name="suffix"
+            type="text"
+            maxLength="40"
             value={this.state.suffix}
             onChange={this.handleInputChange}
           />
-          <small className='info'>
+          <small className="info">
             Leave blank to use original filenames as suffix.
           </small>
           <br />
-          <small className='info'>
+          <small className="info">
             They will be numbered (XXXXsuffix.extension)
           </small>
         </label>
         <br />
-        <label htmlFor='order'>
+        <label htmlFor="order">
           Order:
           <div>
             Ordered
             <input
-              type='radio'
-              name='order'
-              id='consecutive'
-              value='consecutive'
+              type="radio"
+              name="order"
+              id="consecutive"
+              value="consecutive"
               onChange={this.handleInputChange}
-              checked={this.state.order === 'consecutive'}
+              checked={this.state.order === "consecutive"}
             />
             Grouped
             <input
-              type='radio'
-              name='order'
-              id='grouped'
-              value='grouped'
+              type="radio"
+              name="order"
+              id="grouped"
+              value="grouped"
               onChange={this.handleInputChange}
-              checked={this.state.order === 'grouped'}
+              checked={this.state.order === "grouped"}
             />
           </div>
-          <small className='info'>
+          <small className="info">
             Ordered (1,2,3,1,2...) | Grouped (1,1,1,2,2...)
           </small>
         </label>
         <br />
+        <SortableContainer onSortEnd={this.onSortEnd} lockAxis='y'>
+          {filePaths.map((value, index) => (
+            <SortableItem key={`item-${index}`} index={index} value={value} />
+          ))}
+        </SortableContainer>
+        <br />
         <h3>Process</h3>
         <hr />
         <Button
-          color='info'
-          type='button'
-          faIcon='fa-files-o fa-3x'
-          title='Select files'
-          onClick={() => ipcRenderer.send('open-file-dialog')}
+          color="info"
+          type="button"
+          faIcon="fa-files-o fa-3x"
+          title="Select files"
+          onClick={() => ipcRenderer.send("open-file-dialog")}
         />
-        <i className='fa fa-arrow-right fa-2x' />
+        <i className="fa fa-arrow-right fa-2x" />
         <Button
-          color='info'
+          color="info"
           disabled={filePaths.length < 1}
-          type='button'
-          faIcon='fa-folder-open-o fa-3x'
-          title='Select destination'
-          onClick={() => ipcRenderer.send('open-directory-dialog')}
+          type="button"
+          faIcon="fa-folder-open-o fa-3x"
+          title="Select destination"
+          onClick={() => ipcRenderer.send("open-directory-dialog")}
         />
-        <i className='fa fa-arrow-right fa-2x' />
+        <i className="fa fa-arrow-right fa-2x" />
         <Button
-          color='success'
+          color="success"
           disabled={filePaths.length < 1 || !destinationFolder}
-          type='button'
-          faIcon='fa-clone fa-3x'
-          title='Clone files'
+          type="button"
+          faIcon="fa-clone fa-3x"
+          title="Clone files"
           onClick={() => this.cloneFiles()}
         />
         <br />
-        <div id='info' className={info.type}>
+        <div id="info" className={info.type}>
           {info.text}
         </div>
       </div>
-    )
+    );
   }
 }

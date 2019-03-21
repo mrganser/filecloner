@@ -59,3 +59,20 @@ input[type="number"] {
 h3 {
   margin-bottom: 4px;
 }
+
+.sortable-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #fff;
+  user-select: none;
+  color: #272822;
+  max-height: 200px;
+  overflow-y: scroll;
+}
+
+.sortable-item {
+  cursor: pointer;
+  border-bottom: 1px solid #272822;
+  padding: 10px 10px;
+}
