@@ -1,3 +1,6 @@
 node_modules
-app
 dist
+dist-electron
+release
+*.local
+*.tsbuildinfo

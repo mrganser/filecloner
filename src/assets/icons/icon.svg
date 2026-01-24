@@ -1,95 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="1770.0959"
-   viewBox="0 0 1770.0958 1770.0959"
-   width="1770.0958"
-   version="1.1"
-   id="svg4"
-   sodipodi:docname="icon.svg"
-   inkscape:version="0.92.1 r15371"
-   inkscape:export-filename="D:\mrganser\filecloner\src\assets\icons\icon.png"
-   inkscape:export-xdpi="11.25"
-   inkscape:export-ydpi="11.25">
-  <metadata
-     id="metadata10">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <defs
-     id="defs8">
-    <inkscape:path-effect
-       effect="bend_path"
-       id="path-effect4550"
-       is_visible="true"
-       bendpath="M 329.53144,885.40226 H 1408.627"
-       prop_scale="1"
-       scale_y_rel="false"
-       vertical="false" />
-    <inkscape:path-effect
-       effect="bend_path"
-       id="path-effect4546"
-       is_visible="true"
-       bendpath="M 329.53144,885.40226 H 1408.627"
-       prop_scale="1"
-       scale_y_rel="false"
-       vertical="false" />
-  </defs>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1137"
-     id="namedview6"
-     showgrid="false"
-     showguides="false"
-     inkscape:guide-bbox="true"
-     inkscape:zoom="0.37249375"
-     inkscape:cx="495.71691"
-     inkscape:cy="859.20831"
-     inkscape:window-x="1272"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg4"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0">
-    <sodipodi:guide
-       position="1130.0013,1520.1248"
-       orientation="1,0"
-       id="guide4537"
-       inkscape:locked="false" />
-  </sodipodi:namedview>
-  <path
-     d="M 885.04792,1770.0959 C 396.26544,1770.0959 0,1373.8304 0,885.04791 0,396.23596 396.26544,0 885.04792,0 c 488.78248,0 885.04798,396.23596 885.04798,885.04791 0,488.78249 -396.2655,885.04799 -885.04798,885.04799 z"
-     style="clip-rule:evenodd;fill:#3e9dd7;fill-rule:evenodd;stroke-width:29.50159645"
-     id="path2-9"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="sssss" />
-  <path
-     sodipodi:nodetypes="cccccccccccccccccccccccccccccccc"
-     inkscape:connector-curvature="0"
-     id="path4680"
-     d="m 507.74312,344.67341 c -55.68992,0.0523 -106.25265,50.07809 -106.18081,105.90466 0.25329,210.77114 -1.09549,421.55176 0.68941,632.31623 -0.0545,29.0215 15.58298,56.3199 37.06374,75.0578 21.39952,18.7778 50.20505,29.1656 78.7193,26.8489 34.19902,0.02 68.39803,0.029 102.59704,0.027 0.34629,42.9065 -0.0716,85.862 1.38298,128.7336 8.43565,52.5439 60.21167,94.4589 113.52419,90.399 191.80061,0.056 383.60123,0.045 575.40193,0.049 V 1294.412 c -193.4288,-0.3501 -386.86046,0.7466 -580.2868,-0.629 -2.26258,-7.4833 0.84277,-15.3164 -0.4391,-22.9574 0.0297,-28.6682 0.0437,-57.3364 0.044,-86.0046 120.03461,0.016 240.06923,-0.051 360.1038,0.051 v -109.351 c -111.49711,-1.0879 -223.00067,0.032 -334.50064,-0.1166 -8.55194,0.01 -17.1039,0.013 -25.65584,0.019 -0.086,-133.81994 -0.22956,-267.64107 0.49392,-401.4597 7.18112,-2.48331 14.75957,0.79607 22.20005,-0.51862 H 1310.9409 V 563.83972 c -196.68,0.13182 -393.36908,-0.26577 -590.04329,0.20976 -53.34152,3.48273 -100.15765,51.86331 -100.15382,105.63398 -0.0905,135.22593 -0.0996,270.45191 -0.2486,405.67784 -36.36723,-0.2275 -72.78789,0.074 -109.11349,-1.169 -1.99764,-8.8105 0.9684,-17.8423 -0.33692,-26.7424 0.22437,-197.5487 -0.56887,-395.09899 0.47357,-592.64628 7.1688,-2.51256 14.75674,0.77969 22.20005,-0.5285 h 556.6444 V 344.67101 c 0,0 -388.44615,0.004 -582.61964,0.002 z"
-     style="fill:#ffffff;stroke-width:0.5707553" />
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="#1a1410"/>
+
+  <!-- Inner subtle ring -->
+  <circle cx="256" cy="256" r="220" fill="none" stroke="#F49325" stroke-width="2" opacity="0.2"/>
+
+  <!-- Copy icon scaled and centered -->
+  <g transform="translate(136, 136) scale(10)" stroke="#F49325" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+  </g>
 </svg>
