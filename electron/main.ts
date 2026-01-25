@@ -4,6 +4,7 @@ import path from 'path'
 let mainWindow: BrowserWindow | null = null
 
 function createWindow() {
+  // Icon path for development (in production, macOS uses the bundled .icns from Resources)
   const iconPath = path.join(__dirname, '../src/assets/icons/icon.png')
 
   mainWindow = new BrowserWindow({
@@ -24,8 +25,8 @@ function createWindow() {
     },
   })
 
-  // Set dock icon on macOS during development
-  if (process.platform === 'darwin' && app.dock) {
+  // Set dock icon on macOS during development (in production, macOS uses the bundled icon)
+  if (process.env.VITE_DEV_SERVER_URL && process.platform === 'darwin' && app.dock) {
     app.dock.setIcon(iconPath)
   }
 
@@ -33,8 +34,13 @@ function createWindow() {
     mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL)
     mainWindow.webContents.openDevTools()
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
+    mainWindow.loadFile(path.join(app.getAppPath(), 'dist', 'index.html'))
   }
+
+  // Error handling for debugging
+  mainWindow.webContents.on('did-fail-load', (_event, errorCode, errorDescription) => {
+    console.error('Failed to load:', errorCode, errorDescription)
+  })
 
   mainWindow.on('closed', () => {
     mainWindow = null
