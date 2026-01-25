@@ -6,10 +6,11 @@ import { mockElectronAPI } from './test/setup'
 
 describe('File Cloner App', () => {
   beforeEach(() => {
-    vi.restoreAllMocks()
     vi.clearAllMocks()
-    // Reset confirm dialog to always return true
-    vi.spyOn(window, 'confirm').mockReturnValue(true)
+    // Reset mocks with default implementations
+    mockElectronAPI.readFile.mockImplementation((path: string) => Buffer.from(`content of ${path}`))
+    mockElectronAPI.fileExists.mockReturnValue(true)
+    window.confirm = vi.fn(() => true)
   })
 
   describe('Initial State', () => {
@@ -359,7 +360,6 @@ describe('File Cloner App', () => {
 
     it('asks for confirmation before cloning', async () => {
       const user = userEvent.setup()
-      const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true)
       mockElectronAPI.openFileDialog.mockResolvedValue(['/path/to/file.txt'])
       mockElectronAPI.openDirectoryDialog.mockResolvedValue('/output')
 
@@ -373,13 +373,21 @@ describe('File Cloner App', () => {
 
       await user.click(screen.getByRole('button', { name: /clone/i }))
 
-      expect(confirmSpy).toHaveBeenCalledWith(
+      expect(window.confirm).toHaveBeenCalledWith(
         'Files with the same name will be overwritten. Continue?'
       )
+
+      // Wait for cloning to complete to avoid leaking into next test
+      await waitFor(() => {
+        expect(screen.getByText(/successfully cloned/i)).toBeInTheDocument()
+      })
     })
 
     it('does not clone when confirmation is cancelled', async () => {
       const user = userEvent.setup()
+      // Set confirm to return false
+      const confirmMock = vi.fn(() => false)
+      window.confirm = confirmMock
       mockElectronAPI.openFileDialog.mockResolvedValue(['/path/to/file.txt'])
       mockElectronAPI.openDirectoryDialog.mockResolvedValue('/output')
 
@@ -390,18 +398,16 @@ describe('File Cloner App', () => {
 
       await user.click(screen.getByRole('button', { name: /destination/i }))
       await waitFor(() => expect(screen.getByText('/output')).toBeInTheDocument())
-
-      // Set confirm to return false JUST before clicking clone
-      vi.spyOn(window, 'confirm').mockReturnValue(false)
-      const writeCallsBefore = mockElectronAPI.writeFile.mock.calls.length
 
       await user.click(screen.getByRole('button', { name: /clone/i }))
 
       // Give time for any async operations
       await new Promise((r) => setTimeout(r, 100))
 
-      // Should not have any new write calls
-      expect(mockElectronAPI.writeFile.mock.calls.length).toBe(writeCallsBefore)
+      // Confirm should have been called
+      expect(confirmMock).toHaveBeenCalled()
+      // Should not have written any files since confirm returned false
+      expect(mockElectronAPI.writeFile).not.toHaveBeenCalled()
     })
   })
 

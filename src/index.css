@@ -6,44 +6,66 @@
 @import '@fontsource/lora/500.css';
 @import '@fontsource/lora/600.css';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  :root {
-    /* Warm amber/copper palette */
-    --background: 30 15% 8%;
-    --foreground: 35 25% 92%;
-    --card: 28 12% 11%;
-    --card-foreground: 35 25% 92%;
-    --primary: 32 90% 55%;
-    --primary-foreground: 30 15% 8%;
-    --secondary: 28 10% 16%;
-    --secondary-foreground: 35 20% 85%;
-    --muted: 28 8% 14%;
-    --muted-foreground: 30 12% 55%;
-    --accent: 32 60% 25%;
-    --accent-foreground: 35 25% 95%;
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 98%;
-    --success: 142 70% 45%;
-    --success-foreground: 0 0% 98%;
-    --border: 30 10% 18%;
-    --input: 30 10% 18%;
-    --ring: 32 90% 55%;
-    --radius: 0.75rem;
+@theme {
+  --color-background: hsl(30 15% 8%);
+  --color-foreground: hsl(35 25% 92%);
+  --color-card: hsl(28 12% 11%);
+  --color-card-foreground: hsl(35 25% 92%);
+  --color-primary: hsl(32 90% 55%);
+  --color-primary-foreground: hsl(30 15% 8%);
+  --color-secondary: hsl(28 10% 16%);
+  --color-secondary-foreground: hsl(35 20% 85%);
+  --color-muted: hsl(28 8% 14%);
+  --color-muted-foreground: hsl(30 12% 55%);
+  --color-accent: hsl(32 60% 25%);
+  --color-accent-foreground: hsl(35 25% 95%);
+  --color-destructive: hsl(0 72% 51%);
+  --color-destructive-foreground: hsl(0 0% 98%);
+  --color-success: hsl(142 70% 45%);
+  --color-success-foreground: hsl(0 0% 98%);
+  --color-border: hsl(30 10% 18%);
+  --color-input: hsl(30 10% 18%);
+  --color-ring: hsl(32 90% 55%);
 
-    /* Custom colors */
-    --glow: 32 100% 60%;
-    --copper: 25 80% 45%;
-    --amber: 38 92% 50%;
-  }
+  --radius-lg: 0.75rem;
+  --radius-md: calc(0.75rem - 2px);
+  --radius-sm: calc(0.75rem - 4px);
+}
+
+:root {
+  /* CSS variables for use in custom styles */
+  --background: 30 15% 8%;
+  --foreground: 35 25% 92%;
+  --card: 28 12% 11%;
+  --card-foreground: 35 25% 92%;
+  --primary: 32 90% 55%;
+  --primary-foreground: 30 15% 8%;
+  --secondary: 28 10% 16%;
+  --secondary-foreground: 35 20% 85%;
+  --muted: 28 8% 14%;
+  --muted-foreground: 30 12% 55%;
+  --accent: 32 60% 25%;
+  --accent-foreground: 35 25% 95%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 98%;
+  --success: 142 70% 45%;
+  --success-foreground: 0 0% 98%;
+  --border: 30 10% 18%;
+  --input: 30 10% 18%;
+  --ring: 32 90% 55%;
+  --radius: 0.75rem;
+
+  /* Custom colors */
+  --glow: 32 100% 60%;
+  --copper: 25 80% 45%;
+  --amber: 38 92% 50%;
 }
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: var(--color-border);
   }
 
   html {
@@ -51,14 +73,14 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
     font-feature-settings: "rlig" 1, "calt" 1;
     background-image:
       radial-gradient(ellipse 80% 50% at 50% -20%, hsl(32 60% 15% / 0.5), transparent),
       radial-gradient(ellipse 60% 40% at 100% 100%, hsl(25 50% 12% / 0.4), transparent);
     min-height: 100vh;
   }
-
 
   /* Only the drag-region class should be draggable */
   .drag-region {

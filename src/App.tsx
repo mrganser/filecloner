@@ -79,7 +79,7 @@ export default function App() {
       return setMessage({ text: 'Quantity must be between 1 and 10,000', type: 'warning' })
     }
 
-    if (!confirm('Files with the same name will be overwritten. Continue?')) {
+    if (!window.confirm('Files with the same name will be overwritten. Continue?')) {
       return
     }
 
