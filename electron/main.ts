@@ -1,11 +1,17 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import path from 'path'
 
+// Electron Forge Vite plugin globals
+declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string | undefined
+declare const MAIN_WINDOW_VITE_NAME: string
+
 let mainWindow: BrowserWindow | null = null
 
 function createWindow() {
   // Icon path for development (in production, macOS uses the bundled .icns from Resources)
-  const iconPath = path.join(__dirname, '../src/assets/icons/icon.png')
+  const iconPath = app.isPackaged
+    ? path.join(process.resourcesPath, 'src/assets/icons/icon.png')
+    : path.join(__dirname, '../../src/assets/icons/icon.png')
 
   mainWindow = new BrowserWindow({
     title: 'File Cloner',
@@ -26,15 +32,15 @@ function createWindow() {
   })
 
   // Set dock icon on macOS during development (in production, macOS uses the bundled icon)
-  if (process.env.VITE_DEV_SERVER_URL && process.platform === 'darwin' && app.dock) {
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL && process.platform === 'darwin' && app.dock) {
     app.dock.setIcon(iconPath)
   }
 
-  if (process.env.VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL)
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL)
     mainWindow.webContents.openDevTools()
   } else {
-    mainWindow.loadFile(path.join(app.getAppPath(), 'dist', 'index.html'))
+    mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`))
   }
 
   // Error handling for debugging

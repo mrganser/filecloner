@@ -32,7 +32,7 @@ Small desktop app to clone files. The process is the following:
 
 - Start desktop app (with hot reload):
 
-  `npm start`
+  `npm run dev`
 
 ## Running the tests
 
@@ -50,13 +50,17 @@ Small desktop app to clone files. The process is the following:
 
 ## Deployment
 
-- Build for your platform:
+- Package app (unpacked, for testing):
 
-  `npm run dist`
+  `npm run package`
+
+- Build distributable for your platform:
+
+  `npm run make`
 
 ## Built With
 
-- [Electron](https://electronjs.org/)
+- [Electron](https://electronjs.org/) + [Electron Forge](https://www.electronforge.io/)
 - [React](https://reactjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Vite](https://vitejs.dev/)
