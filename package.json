@@ -1,7 +1,7 @@
 {
   "name": "filecloner",
   "productName": "File Cloner",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A small app to clone files",
   "author": "mrganser",
   "license": "MIT",
